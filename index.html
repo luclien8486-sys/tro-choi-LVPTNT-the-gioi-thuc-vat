@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trò chơi thế giới thực vật cho bé 4-5 tuổi</title>
+<style>
+:root{--green:#1f7a54;--light:#f4fff5;--yellow:#ffd766;--pink:#ff6f98;--blue:#64c9ff;--shadow:0 10px 30px rgba(27,104,65,.16)}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Arial Rounded MT Bold","Nunito",system-ui,sans-serif;background:linear-gradient(180deg,#ecfff3,#eef8ff);color:#244a39}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:4px solid #ffb33c;outline-offset:3px}
+.app{max-width:1200px;margin:0 auto;padding:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:clamp(22px,3.2vw,32px);font-weight:900;color:var(--green)}
+.tools{display:flex;gap:10px;align-items:center}
+.pill,.iconbtn{background:#fff;border:0;border-radius:999px;box-shadow:var(--shadow)}
+.pill{padding:12px 18px;font-weight:900}
+.iconbtn{width:52px;height:52px;font-size:24px}
+.progress{display:flex;gap:8px;margin:18px 0}
+.dot{height:12px;flex:1;border-radius:999px;background:#dcebdd}
+.dot.done{background:#58c48e}
+.dot.now{background:#ffbe4d}
+.stage{background:rgba(255,255,255,.92);border:4px solid white;box-shadow:0 20px 60px rgba(42,110,70,.12);border-radius:34px;padding:26px 20px 24px;min-height:640px;text-align:center;position:relative;overflow:hidden}
+.stage:before{content:"";position:absolute;left:-120px;bottom:-180px;width:340px;height:340px;background:#dff8d9;border-radius:50%}
+.stage:after{content:"";position:absolute;right:-90px;top:-120px;width:260px;height:260px;background:#fff4cf;border-radius:50%}
+.stage>*{position:relative;z-index:1}
+.kicker{display:inline-block;background:#fff3bf;color:#8a6100;border-radius:999px;padding:10px 18px;font-weight:900}
+.heading{margin:12px 0 10px;font-size:clamp(30px,5vw,54px);line-height:1.1;color:var(--green)}
+.sub{max-width:860px;margin:0 auto 18px;font-size:clamp(18px,2.4vw,24px);font-weight:800;line-height:1.35}
+.hero{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:10px 0 18px}
+.art{width:100%;height:100%;filter:drop-shadow(0 10px 10px rgba(0,0,0,.08))}
+.hero .bigart{width:180px;height:180px}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:960px;margin:16px auto}
+.choices.onecol{grid-template-columns:1fr;max-width:460px}
+.choices.two{grid-template-columns:repeat(2,minmax(0,1fr));max-width:760px}
+.choice{background:linear-gradient(180deg,#fff,#f5fff6);border:4px solid #d5ecda;border-radius:28px;min-height:220px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#244a39;box-shadow:var(--shadow);transition:transform .15s,border-color .15s,background .15s}
+.choice:hover{transform:translateY(-4px)}
+.choice .artbox{width:min(100%,160px);height:150px}
+.label{font-size:clamp(20px,2.3vw,28px);font-weight:900}
+.choice.correct{background:#dffbe7;border-color:#42bf7e}
+.choice.wrong{background:#ffe7ec;border-color:#ff7990}
+.choice:disabled{cursor:default}
+.choice:disabled:hover{transform:none}
+.primary{border:0;border-radius:999px;background:linear-gradient(135deg,#ffd55d,#ffab3d);padding:17px 38px;min-width:220px;font-size:clamp(20px,2.5vw,26px);font-weight:900;color:#6a4200;box-shadow:0 8px 0 #dd8c26}
+.secondary{border:2px solid #b8e3ca;border-radius:999px;background:white;padding:12px 18px;font-weight:800;color:var(--green)}
+.feedback{min-height:44px;margin:12px auto;font-size:26px;font-weight:900;color:#1f8754}
+.feedback.err{color:#d74f67}
+.bottom{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:16px}
+.note{text-align:center;color:#5a7a69;font-size:15px;margin-top:12px}
+.order{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:960px;margin:18px auto}
+.step{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#ffe08c;color:#764f00;font-weight:900;font-size:22px}
+.scorebig{font-size:62px;font-weight:900;color:var(--green);margin:8px 0}
+.stars{font-size:66px;margin:8px 0}
+@media (max-width:760px){
+  .stage{padding:22px 10px 20px;min-height:680px;border-radius:24px}
+  .choices,.order{grid-template-columns:1fr;gap:10px}
+  .choices.two{grid-template-columns:1fr}
+  .choice{min-height:175px;border-radius:20px;padding:10px}
+  .choice .artbox{height:110px}
+  .hero .bigart{width:120px;height:120px}
+  .iconbtn{width:46px;height:46px}
+}
+</style>
+</head>
+<body>
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden"><defs>
+<linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8de76b"/><stop offset="1" stop-color="#199c60"/></linearGradient>
+<linearGradient id="petal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffb2cf"/><stop offset="1" stop-color="#f44784"/></linearGradient>
+<linearGradient id="pot" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ffc36d"/><stop offset="1" stop-color="#f67c43"/></linearGradient>
+<symbol id="flower" viewBox="0 0 200 200"><path d="M99 175Q91 125 101 88" stroke="#27935d" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M99 140Q59 90 38 125Q61 155 99 140ZM97 151Q135 110 158 125Q141 159 97 151Z" fill="url(#leaf)"/><g fill="url(#petal)" stroke="#ee4679" stroke-width="2"><ellipse cx="101" cy="41" rx="22" ry="37"/><ellipse cx="101" cy="41" rx="22" ry="37" transform="rotate(60 101 76)"/><ellipse cx="101" cy="41" rx="22" ry="37" transform="rotate(120 101 76)"/><ellipse cx="101" cy="41" rx="22" ry="37" transform="rotate(180 101 76)"/><ellipse cx="101" cy="41" rx="22" ry="37" transform="rotate(240 101 76)"/><ellipse cx="101" cy="41" rx="22" ry="37" transform="rotate(300 101 76)"/></g><circle cx="101" cy="76" r="24" fill="#ffd65b" stroke="#efaa31" stroke-width="3"/><circle cx="93" cy="71" r="3" fill="#775c19"/><circle cx="109" cy="71" r="3" fill="#775c19"/><path d="M94 83Q101 91 109 83" fill="none" stroke="#775c19" stroke-width="2" stroke-linecap="round"/><path d="M66 173H137" stroke="#72b782" stroke-width="5" stroke-linecap="round"/></symbol>
+<symbol id="yellowflower" viewBox="0 0 200 200"><path d="M100 177V90" stroke="#248957" stroke-width="9" stroke-linecap="round"/><path d="M100 143Q54 96 44 134Q68 158 100 143ZM100 158Q141 113 159 140Q143 164 100 158" fill="url(#leaf)"/><g fill="#ffdb45" stroke="#efb820" stroke-width="3"><ellipse cx="100" cy="44" rx="23" ry="36"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(45 100 79)"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(90 100 79)"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(135 100 79)"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(180 100 79)"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(225 100 79)"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(270 100 79)"/><ellipse cx="100" cy="44" rx="23" ry="36" transform="rotate(315 100 79)"/></g><circle cx="100" cy="79" r="28" fill="#9b5b30"/><circle cx="88" cy="74" r="3" fill="#fff6c0"/><circle cx="109" cy="74" r="3" fill="#fff6c0"/><path d="M90 89Q100 99 110 89" stroke="#fff6c0" stroke-width="2" fill="none"/></symbol>
+<symbol id="tree" viewBox="0 0 200 200"><ellipse cx="100" cy="178" rx="68" ry="11" fill="#b6e5a6"/><path d="M85 173L89 99H111L119 173Z" fill="#a56845"/><path d="M99 158L102 108" stroke="#814728" stroke-width="4"/><circle cx="99" cy="78" r="56" fill="#3eaf69"/><circle cx="61" cy="102" r="33" fill="#57c67c"/><circle cx="145" cy="104" r="34" fill="#2f9f65"/><circle cx="82" cy="53" r="30" fill="#75d686"/><circle cx="125" cy="51" r="32" fill="#5fc879"/><g fill="#f44f51"><circle cx="62" cy="92" r="8"/><circle cx="114" cy="64" r="9"/><circle cx="145" cy="105" r="8"/></g></symbol>
+<symbol id="carrot" viewBox="0 0 200 200"><path d="M96 64Q71 39 78 19Q101 26 105 59Q117 23 138 19Q147 45 110 66Q135 35 156 50Q147 74 110 78" fill="#40ad65"/><path d="M74 71Q100 53 129 73Q133 109 101 182Q68 122 74 71Z" fill="url(#pot)" stroke="#e97934" stroke-width="3"/><path d="M81 101l22 8M92 131l18 6M86 87l15 4" stroke="#d97033" stroke-width="4" stroke-linecap="round"/></symbol>
+<symbol id="strawberry" viewBox="0 0 200 200"><path d="M100 45Q58 27 51 73Q49 126 100 175Q155 124 149 73Q144 28 100 45Z" fill="#f44859" stroke="#d73348" stroke-width="4"/><path d="M97 58Q67 44 62 29Q89 32 99 45Q96 12 111 13Q116 34 106 47Q131 29 150 34Q141 55 112 60" fill="#2fa763"/><g fill="#ffe58a"><ellipse cx="74" cy="83" rx="3" ry="5"/><ellipse cx="101" cy="77" rx="3" ry="5"/><ellipse cx="128" cy="86" rx="3" ry="5"/><ellipse cx="84" cy="111" rx="3" ry="5"/><ellipse cx="115" cy="114" rx="3" ry="5"/><ellipse cx="98" cy="142" rx="3" ry="5"/></g></symbol>
+<symbol id="apple" viewBox="0 0 200 200"><path d="M100 61Q74 36 49 64Q20 98 58 151Q80 179 101 167Q123 180 144 151Q182 96 151 64Q128 38 100 61Z" fill="#f34d57" stroke="#d83442" stroke-width="4"/><path d="M100 61Q91 43 105 23" stroke="#85623d" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M107 40Q135 12 151 29Q135 56 107 40Z" fill="#4cad62"/><ellipse cx="66" cy="88" rx="10" ry="20" transform="rotate(26 66 88)" fill="#ff9c9b" opacity=".65"/></symbol>
+<symbol id="sun" viewBox="0 0 200 200"><g stroke="#f6b535" stroke-width="11" stroke-linecap="round"><path d="M100 10V32M100 168V190M10 100H32M168 100H190M36 36L52 52M148 148L164 164M36 164L52 148M148 52L164 36"/></g><circle cx="100" cy="100" r="57" fill="#ffdb59" stroke="#f9bd32" stroke-width="5"/><circle cx="80" cy="94" r="4" fill="#996218"/><circle cx="120" cy="94" r="4" fill="#996218"/><path d="M83 115Q100 133 117 115" stroke="#996218" stroke-width="4" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="water" viewBox="0 0 200 200"><path d="M100 13Q85 49 60 81Q34 119 49 145Q63 172 100 172Q137 172 151 145Q166 119 140 81Q115 49 100 13Z" fill="#63c9f9" stroke="#3599d5" stroke-width="5"/><path d="M72 116Q68 145 91 152" stroke="#d7f6ff" stroke-width="9" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="toy" viewBox="0 0 200 200"><rect x="37" y="53" width="126" height="112" rx="19" fill="#a781f4"/><rect x="55" y="73" width="90" height="72" rx="10" fill="#f3bcf8"/><circle cx="82" cy="105" r="10" fill="#6848a4"/><circle cx="118" cy="105" r="10" fill="#6848a4"/><path d="M81 126Q100 141 120 126" stroke="#6848a4" stroke-width="5" fill="none"/><rect x="87" y="31" width="26" height="24" rx="5" fill="#765ac2"/></symbol>
+<symbol id="seed" viewBox="0 0 200 200"><path d="M29 135Q100 115 171 135V183H29Z" fill="#a87555"/><path d="M29 136Q100 116 171 136" stroke="#735036" stroke-width="5" fill="none"/><ellipse cx="100" cy="143" rx="21" ry="13" transform="rotate(-28 100 143)" fill="#edbc75" stroke="#bc8b4e" stroke-width="3"/></symbol>
+<symbol id="sprout" viewBox="0 0 200 200"><path d="M22 150Q100 126 178 150V187H22Z" fill="#ae7d5c"/><path d="M98 150Q91 112 100 78" stroke="#39945a" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M100 108Q57 54 36 79Q48 114 100 108ZM100 92Q145 43 162 73Q153 105 100 92Z" fill="url(#leaf)"/></symbol>
+<symbol id="plant" viewBox="0 0 200 200"><path d="M58 123L73 182H129L144 123Z" fill="url(#pot)" stroke="#d7824a" stroke-width="3"/><rect x="51" y="117" width="100" height="20" rx="8" fill="#e18a4c"/><path d="M101 123V40" stroke="#378d58" stroke-width="8" stroke-linecap="round"/><path d="M101 89Q52 27 29 64Q47 104 101 89ZM101 67Q148 14 169 47Q158 82 101 67ZM101 117Q55 77 42 100Q53 127 101 117ZM102 108Q146 72 161 98Q149 125 102 108Z" fill="url(#leaf)"/></symbol>
+<symbol id="wholeplant" viewBox="0 0 200 240"><path d="M20 172H180" stroke="#a57956" stroke-width="7" stroke-linecap="round"/><path d="M100 173V78" stroke="#31955b" stroke-width="9" fill="none"/><path d="M102 128Q45 82 40 116Q56 145 102 128ZM102 103Q151 68 162 97Q149 124 102 103Z" fill="url(#leaf)"/><path d="M100 171Q78 196 65 227M100 171V231M100 171Q124 196 139 228M94 191L83 213M109 195L122 211" fill="none" stroke="#bb8657" stroke-width="5" stroke-linecap="round"/><g fill="#ff7b9f"><ellipse cx="100" cy="49" rx="17" ry="28"/><ellipse cx="100" cy="49" rx="17" ry="28" transform="rotate(72 100 75)"/><ellipse cx="100" cy="49" rx="17" ry="28" transform="rotate(144 100 75)"/><ellipse cx="100" cy="49" rx="17" ry="28" transform="rotate(216 100 75)"/><ellipse cx="100" cy="49" rx="17" ry="28" transform="rotate(288 100 75)"/></g><circle cx="100" cy="75" r="18" fill="#ffd65b"/></symbol>
+
+<symbol id="banana" viewBox="0 0 200 200"><path d="M42 118Q58 162 112 166Q147 168 170 146Q147 150 128 136Q102 118 95 84Q91 61 100 36Q75 43 59 63Q36 92 42 118Z" fill="#ffd84f" stroke="#e7b82d" stroke-width="5"/><path d="M99 36Q104 28 111 26" stroke="#7d5a31" stroke-width="6" stroke-linecap="round"/><path d="M164 145Q170 146 175 142" stroke="#7d5a31" stroke-width="6" stroke-linecap="round"/><path d="M60 118Q77 147 114 151Q136 154 153 145" fill="none" stroke="#fff2a6" stroke-width="6" stroke-linecap="round"/></symbol>
+<symbol id="grapes" viewBox="0 0 200 200"><path d="M102 30Q112 18 124 16" stroke="#6a8f2b" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M101 33Q88 42 84 57" stroke="#6a8f2b" stroke-width="5" stroke-linecap="round" fill="none"/><g fill="#7f59d9" stroke="#6645b7" stroke-width="3"><circle cx="101" cy="55" r="17"/><circle cx="81" cy="74" r="17"/><circle cx="120" cy="75" r="17"/><circle cx="64" cy="95" r="17"/><circle cx="100" cy="96" r="17"/><circle cx="137" cy="95" r="17"/><circle cx="80" cy="118" r="17"/><circle cx="120" cy="118" r="17"/><circle cx="100" cy="142" r="17"/></g><path d="M88 37Q106 45 119 38Q109 55 90 57Q80 49 88 37Z" fill="#49b35d"/></symbol>
+</defs></svg>
+<div class="app">
+  <header class="top">
+    <div class="brand">🌿 KHU VƯỜN KỲ DIỆU</div>
+    <div class="tools">
+      <div class="pill" id="scoreTop">⭐ 0 điểm</div>
+      <button class="iconbtn" id="replayVoice" title="Nghe lại" aria-label="Nghe lại">🗣️</button>
+      <button class="iconbtn" id="toggleVoice" title="Bật tắt tiếng đọc" aria-label="Bật tắt tiếng đọc">🔊</button>
+    </div>
+  </header>
+  <div class="progress" id="progress"></div>
+  <main class="stage" id="stage" aria-live="polite"></main>
+  <p class="note">Lời hướng dẫn ngắn, tiếng Việt · Bấm nút 🗣️ để nghe lại · Bé khám phá và suy nghĩ</p>
+</div>
+<script>
+const stage=document.getElementById('stage');
+const progress=document.getElementById('progress');
+const scoreTop=document.getElementById('scoreTop');
+const replayVoice=document.getElementById('replayVoice');
+const toggleVoice=document.getElementById('toggleVoice');
+let slide=0, score=0, locked=false, voiceOn=true, sequence=0, picked=new Set(),currentAnswer=0,voiceTimer=null;
+const maxScore=60;
+const prompts=[
+ ['Xin chào các con.','Hôm nay, chúng mình cùng khám phá khu vườn kỳ diệu nhé.','Con bấm vào nút bắt đầu nào.'],
+ ['Quan sát thật kỹ nhé.','Con hãy chọn tất cả các loại quả.','Có hai loại quả là chuối và nho đấy.'],
+ ['Cây đang bị héo vì thiếu nước.','Con sẽ làm gì để giúp cây khỏe lại?'],
+ ['Bộ phận nào ở dưới đất?','Con hãy chọn rễ cây nhé.'],
+ ['Nhìn hai nhóm cây này nhé.','Đâu là nhóm chỉ có các loại quả?'],
+ ['Bé hãy giúp cây lớn lên.','Chọn lần lượt: hạt giống. Mầm cây. Và cây non.'],
+ ['Bây giờ chúng mình cùng suy nghĩ nhé.','Nếu đặt cây trong một chiếc hộp tối, cây sẽ thiếu gì?'],
+ ['Chúc mừng con đã khám phá xong khu vườn.','Hãy nhớ: cây cần nước, ánh sáng và sự chăm sóc của chúng mình nhé.']
+];
+const art=(name,title='')=>`<svg class="art" role="img" aria-label="${title||name}" viewBox="0 0 200 200"><use href="#${name}"/></svg>`;
+const heroArt=name=>`<div class="bigart">${art(name)}</div>`;
+const button=(label,fn='next()')=>`<button class="primary" onclick="${fn}">${label}</button>`;
+function base(kicker,title,desc,inside,footer=''){
+ return `<span class="kicker">${kicker}</span><h1 class="heading">${title}</h1><p class="sub">${desc}</p>${inside}<div class="feedback" id="feedback" role="status"></div><div class="bottom" id="bottom">${footer}</div>`;
+}
+function card(item,i,action='choose'){
+ return `<button class="choice" data-i="${i}" onclick="${action}(${i})"><div class="artbox">${art(item.pic,item.name)}</div><span class="label">${item.name}</span></button>`;
+}
+function stopSpeak(){if(voiceTimer)clearTimeout(voiceTimer);try{window.speechSynthesis.cancel()}catch(e){}}
+function getVietnameseVoice(){
+ let voices=window.speechSynthesis.getVoices();
+ let matches=voices.filter(v=>/^vi([_-]|$)/i.test(v.lang));
+ return matches.find(v=>/google|microsoft|natural|việt|vietnam/i.test(v.name))||matches[0]||null;
+}
+function speak(parts){
+ if(!voiceOn || !('speechSynthesis' in window))return;
+ stopSpeak();
+ const texts=(Array.isArray(parts)?parts:[parts]).map(t=>String(t).replace(/[🌱🌸💧🎉⭐💚🏆]/gu,'').trim()).filter(Boolean);
+ const voice=getVietnameseVoice();
+ let index=0;
+ const nextPart=()=>{
+  if(!voiceOn || index>=texts.length)return;
+  const u=new SpeechSynthesisUtterance(texts[index++]);
+  u.lang='vi-VN';u.rate=0.87;u.pitch=1;u.volume=1;
+  if(voice)u.voice=voice;
+  u.onend=()=>{voiceTimer=setTimeout(nextPart,460)};
+  u.onerror=()=>{voiceTimer=setTimeout(nextPart,460)};
+  window.speechSynthesis.speak(u);
+ };
+ nextPart();
+}
+function speakSlide(){speak(prompts[slide]);}
+function feedback(ok,visible,spoken){
+ const el=document.getElementById('feedback');
+ el.textContent=visible;el.className='feedback'+(ok?'':' err');
+ speak(spoken||visible);
+}
+function updateScore(){scoreTop.textContent=`⭐ ${score} điểm`}
+function complete(explanation){
+ locked=true;score+=10;updateScore();
+ feedback(true,'🎉 Chính xác! '+explanation,['Chính xác.','Giỏi lắm con.',explanation]);
+ document.getElementById('bottom').innerHTML=button(slide===6?'🏆 NHẬN SAO':'🌼 TIẾP TỤC');
+}
+function question(kicker,title,desc,items,correct){
+ currentAnswer=correct;
+ return base(kicker,title,desc,`<div class="choices">${items.map((it,i)=>card(it,i)).join('')}</div>`);
+}
+function render(){
+ locked=false;picked=new Set();
+ progress.innerHTML=Array.from({length:8},(_,i)=>`<div class="dot ${i<slide?'done':''} ${i===slide?'now':''}"></div>`).join('');
+ updateScore();let html='';
+ if(slide===0)html=base('🌼 VỪA HỌC VỪA CHƠI','KHU VƯỜN KỲ DIỆU','Nghe câu hỏi. Quan sát. Và chọn nhé!',`<div class="hero">${heroArt('tree')}${heroArt('flower')}${heroArt('banana')}</div>`,button('🌟 BẮT ĐẦU'));
+ if(slide===1)html=base('🍌 NHIỆM VỤ 1','TÌM HAI LOẠI QUẢ','Bé chọn đủ hai loại quả.',`<div class="choices">${[{pic:'banana',name:'Quả chuối'},{pic:'carrot',name:'Cà rốt'},{pic:'grapes',name:'Quả nho'}].map((x,i)=>card(x,i,'multiClick')).join('')}</div><p class="sub">🍌 🍇</p>`);
+ if(slide===2)html=question('💧 NHIỆM VỤ 2','CÂY BỊ HÉO RỒI!','Làm gì để cây khỏe lại?',[{pic:'water',name:'Tưới nước'},{pic:'toy',name:'Đưa đồ chơi'},{pic:'banana',name:'Cho quả chuối'}],0);
+ if(slide===3)html=base('🌱 NHIỆM VỤ 3','BỘ PHẬN NÀO Ở DƯỚI ĐẤT?','Con hãy chọn rễ cây nhé.',`<div class="hero">${heroArt('wholeplant')}</div><div class="choices"><button class="choice" data-i="0" onclick="choose(0)"><span class="label">🌸 Hoa</span></button><button class="choice" data-i="1" onclick="choose(1)"><span class="label">🌿 Lá</span></button><button class="choice" data-i="2" onclick="choose(2)"><span class="label">🌱 Rễ</span></button></div>`);currentAnswer=2;
+ if(slide===4)html=base('🧺 NHIỆM VỤ 4','GIỎ NÀO CHỈ CÓ QUẢ?','Quan sát cả hai hình trong mỗi giỏ.',`<div class="choices two">${[
+ {label:'Giỏ số 1', pics:['banana','grapes']},
+ {label:'Giỏ số 2', pics:['carrot','banana']}
+ ].map((x,i)=>`<button class="choice" data-i="${i}" onclick="choose(${i})"><div class="hero" style="margin:0;gap:2px">${x.pics.map(pic=>`<div style="width:115px;height:125px">${art(pic)}</div>`).join('')}</div><span class="label">${x.label}</span></button>`).join('')}</div>`);currentAnswer=0;
+ if(slide===5){sequence=0;html=base('🌿 NHIỆM VỤ 5','CÂY LỚN LÊN THẾ NÀO?','Bé chạm hình theo thứ tự.',`<div class="order">${[{pic:'plant',name:'Cây non'},{pic:'seed',name:'Hạt giống'},{pic:'sprout',name:'Mầm cây'}].map((x,i)=>`<button class="choice" data-i="${i}" onclick="orderClick(${i})"><div class="artbox">${art(x.pic)}</div><span class="label">${x.name}</span></button>`).join('')}</div><p class="sub" id="orderHelp">🌰 → 🌱 → 🌿</p>`)}
+ if(slide===6)html=question('☀️ NHIỆM VỤ 6','CÂY Ở TRONG HỘP TỐI','Cây sẽ thiếu gì?',[{pic:'water',name:'Nước'},{pic:'yellowflower',name:'Ánh sáng'},{pic:'toy',name:'Đồ chơi'}],1);
+ if(slide===7)html=base('🏆 XUẤT SẮC','BÉ LÀ NGƯỜI BẠN CỦA CÂY!','Con nhớ chăm sóc cây mỗi ngày nhé!',`<div class="stars">🌟🌟🌟</div><div class="scorebig">${score} / ${maxScore}</div><div class="hero">${heroArt('yellowflower')}${heroArt('tree')}${heroArt('plant')}</div><p class="sub">💧 Nước &nbsp; ☀️ Ánh sáng &nbsp; 💚 Chăm sóc</p>`,button('🔄 CHƠI LẠI','restart()'));
+ stage.innerHTML=html;
+ // Browsers normally permit speech only after a tap. The large replay button is always available.
+ if(slide>0)setTimeout(speakSlide,320);
+}
+function multiClick(i){
+ if(locked)return;
+ let buttons=[...stage.querySelectorAll('.choice')];
+ if(i===1){feedback(false,'Con tìm các loại quả nhé.','Cà rốt là củ. Con hãy tìm quả nhé.');return;}
+ if(picked.has(i))return;
+ picked.add(i);buttons[i].classList.add('correct');buttons[i].disabled=true;
+ if(picked.size===2)complete('Chuối và nho đều là quả.');
+ else feedback(true,'Đúng rồi! Hãy tìm thêm một quả.','Con đã tìm đúng một quả. Hãy tìm thêm một quả nữa nhé.');
+}
+const explanations={2:'Khi thiếu nước, cây có thể bị héo. Chúng mình tưới nước vừa đủ nhé.',3:'Rễ hút nước từ đất để nuôi cây.',4:'Giỏ số một có chuối và nho. Cả hai đều là quả.',6:'Cây cần ánh sáng để phát triển.'};
+function choose(i){
+ if(locked)return;
+ const buttons=[...stage.querySelectorAll('.choice')];
+ if(i===currentAnswer){buttons.forEach(b=>b.disabled=true);buttons[i].classList.add('correct');complete(explanations[slide]);}
+ else{buttons[i].classList.add('wrong');feedback(false,'Chưa đúng. Bé thử lại nhé.','Chưa đúng rồi. Con quan sát lại nhé.');setTimeout(()=>{if(stage.contains(buttons[i]))buttons[i].classList.remove('wrong')},750);}
+}
+function orderClick(i){
+ if(locked)return;
+ const expected=[1,2,0];
+ if(i!==expected[sequence]){feedback(false,'Bé thử chọn lại nhé.','Con hãy chọn hình tiếp theo trong quá trình lớn lên của cây nhé.');return;}
+ const button=stage.querySelector(`.choice[data-i="${i}"]`);button.classList.add('correct');button.disabled=true;sequence++;
+ if(sequence===3){complete('Hạt nảy mầm, rồi phát triển thành cây non.');return;}
+ const msgs=sequence===1?['Đúng rồi! Chọn mầm cây nhé.','Chính xác. Từ hạt, con hãy tìm mầm cây.']:['Giỏi quá! Chọn cây non nhé.','Mầm cây sẽ lớn thành cây non. Con chọn cây non nhé.'];
+ feedback(true,msgs[0],msgs[1]);
+}
+function next(){stopSpeak();if(slide<7){slide++;render()}}
+function restart(){stopSpeak();slide=0;score=0;render()}
+replayVoice.onclick=()=>speakSlide();
+toggleVoice.onclick=()=>{voiceOn=!voiceOn;toggleVoice.textContent=voiceOn?'🔊':'🔇';if(!voiceOn)stopSpeak();else speakSlide()};
+// First tap explicitly enables voice on browsers blocking automatic sound.
+document.addEventListener('pointerdown',function init(){if('speechSynthesis' in window){speechSynthesis.getVoices()}},{once:true});
+render();
+</script>
+</body>
+</html>
